@@ -12,10 +12,12 @@ export interface VoucherData {
   TELEFONE: string;
   CONTATO_PESSOAL: string;
   VALOR_GAS: string | number;
-  STATUS: 'NOVO' | 'ATIVO' | 'FINALIZADO' | 'SUSPENSO' | 'PERDIDO';
+  QTD_GAS: string | number;
+  STATUS: 'VALE LIBERADO' | 'RETIRADO';
   DATA_ALTERACAO: string;
   DATA_EMISSAO: string;
   DATA_VENCIMENTO: string;
+  DATA_RETIRADA?: string;
   existe?: boolean;
 }
 

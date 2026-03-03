@@ -53,11 +53,14 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan }) => {
   }, [onScan]);
 
   return (
-    <div className="w-full max-w-md mx-auto p-4">
-      <div id="reader" className="overflow-hidden rounded-2xl border-2 border-slate-200 bg-white shadow-lg"></div>
-      <p className="text-center mt-4 text-slate-500 text-sm font-medium">
-        Aponte a câmera para o QR Code do vale
-      </p>
+    <div className="w-full h-full flex flex-col items-center justify-center p-4">
+      <div id="reader" className="w-full max-w-sm overflow-hidden rounded-3xl border-4 border-emerald-500/30 bg-black shadow-2xl"></div>
+      <div className="mt-6 text-center space-y-2">
+        <p className="text-white text-lg font-black tracking-tight uppercase">Escaneando...</p>
+        <p className="text-slate-400 text-xs font-medium px-8">
+          Posicione o QR Code dentro da área demarcada para leitura automática
+        </p>
+      </div>
     </div>
   );
 };

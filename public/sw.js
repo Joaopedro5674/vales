@@ -1,10 +1,7 @@
-const CACHE_NAME = 'vales-cache-v1';
+const CACHE_NAME = 'vales-v2-cache';
 const ASSETS = [
   '/',
   '/index.html',
-  '/src/main.tsx',
-  '/src/App.tsx',
-  '/src/index.css',
   '/manifest.json'
 ];
 
@@ -17,6 +14,11 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Never cache API calls
+  if (event.request.url.includes('script.google.com')) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((response) => {
       return response || fetch(event.request);

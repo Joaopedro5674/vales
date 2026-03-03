@@ -1,5 +1,5 @@
 {
-  "name": "Controle de Vales",
-  "description": "Aplicativo mobile-first para controle de vales de gás com integração Google Sheets",
+  "name": "Controle de Vales v2.0",
+  "description": "Sistema PWA profissional para controle de vales de gás com QR Code e integração Google Sheets",
   "requestFramePermissions": ["camera"]
 }
