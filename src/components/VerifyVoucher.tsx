@@ -48,7 +48,7 @@ export const VerifyVoucher: React.FC = () => {
       let data = JSON.parse(await response.text());
 
       // 2ª Tentativa: Tenta com todas as letras maiúsculas (ex: vr-03 -> VR-03)
-      if (!data.sucesso && cleanId !== cleanId.toUpperCase()) {
+      if (!data.sucesso && !data.encontrado && cleanId !== cleanId.toUpperCase()) {
         response = await fetch(API_URL, {
           method: "POST",
           body: JSON.stringify({ acao: "verificar", id_vale: cleanId.toUpperCase() })
@@ -57,7 +57,7 @@ export const VerifyVoucher: React.FC = () => {
       }
 
       // 3ª Tentativa: Tenta com todas as letras minúsculas (ex: VR-03 -> vr-03)
-      if (!data.sucesso && cleanId !== cleanId.toLowerCase()) {
+      if (!data.sucesso && !data.encontrado && cleanId !== cleanId.toLowerCase()) {
         response = await fetch(API_URL, {
           method: "POST",
           body: JSON.stringify({ acao: "verificar", id_vale: cleanId.toLowerCase() })
@@ -65,7 +65,7 @@ export const VerifyVoucher: React.FC = () => {
         data = JSON.parse(await response.text());
       }
 
-      if (data.sucesso) {
+      if (data.sucesso || data.encontrado) {
         setVoucherData(data.vale || data.dados || data.resultado || data);
       } else {
         setError('Vale não encontrado.');
