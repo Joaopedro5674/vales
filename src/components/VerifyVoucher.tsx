@@ -68,10 +68,12 @@ export const VerifyVoucher: React.FC = () => {
       if (data.sucesso || data.encontrado) {
         setVoucherData(data.vale || data.dados || data.resultado || data);
       } else {
-        setError('Vale não encontrado.');
+        console.warn("DEBUG INFO (Vale não achou):", data);
+        setError(`Não encontrado. Info: ${JSON.stringify(data)}`);
       }
-    } catch (err) {
-      setError('Erro de conexão.');
+    } catch (err: any) {
+      console.error("DEBUG INFO (Erro catch):", err);
+      setError(`Erro de conexão: ${err.message || String(err)}`);
     } finally {
       setLoading(false);
     }
