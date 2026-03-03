@@ -33,22 +33,38 @@ export const VerifyVoucher: React.FC = () => {
 
   const handleVerify = async (id: string) => {
     if (!id) return;
+
+    const cleanId = id.trim();
     setLoading(true);
     setError(null);
     setVoucherData(null);
-    
+
     try {
-      const response = await fetch(API_URL, {
+      // 1ª Tentativa: Envia o ID exatamente como digitado (sem espaços em branco)
+      let response = await fetch(API_URL, {
         method: "POST",
-        body: JSON.stringify({
-          acao: "verificar",
-          id_vale: id
-        })
+        body: JSON.stringify({ acao: "verificar", id_vale: cleanId })
       });
-      
-      const texto = await response.text();
-      const data = JSON.parse(texto);
-      
+      let data = JSON.parse(await response.text());
+
+      // 2ª Tentativa: Tenta com todas as letras maiúsculas (ex: vr-03 -> VR-03)
+      if (!data.sucesso && cleanId !== cleanId.toUpperCase()) {
+        response = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ acao: "verificar", id_vale: cleanId.toUpperCase() })
+        });
+        data = JSON.parse(await response.text());
+      }
+
+      // 3ª Tentativa: Tenta com todas as letras minúsculas (ex: VR-03 -> vr-03)
+      if (!data.sucesso && cleanId !== cleanId.toLowerCase()) {
+        response = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ acao: "verificar", id_vale: cleanId.toLowerCase() })
+        });
+        data = JSON.parse(await response.text());
+      }
+
       if (data.sucesso) {
         setVoucherData(data.vale || data.dados || data.resultado || data);
       } else {
@@ -64,7 +80,7 @@ export const VerifyVoucher: React.FC = () => {
   const handleFinalize = async () => {
     if (!voucherData) return;
     const id = voucherData.id_vale || voucherData.ID_VALE;
-    
+
     setFinalizing(true);
     try {
       const response = await fetch(API_URL, {
@@ -74,10 +90,10 @@ export const VerifyVoucher: React.FC = () => {
           id_vale: id
         })
       });
-      
+
       const texto = await response.text();
       const data = JSON.parse(texto);
-      
+
       if (data.sucesso) {
         handleVerify(id);
       } else {
@@ -141,7 +157,7 @@ export const VerifyVoucher: React.FC = () => {
 
           <AnimatePresence mode="wait">
             {error && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="bg-white p-8 rounded-3xl border border-red-100 shadow-xl text-center space-y-3"
@@ -173,7 +189,7 @@ export const VerifyVoucher: React.FC = () => {
                         <p className="font-black text-slate-800 text-sm truncate">{voucherData.nome || voucherData.NOME}</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl">
                       <Phone className="text-emerald-600" size={18} />
                       <div>
@@ -236,7 +252,7 @@ export const VerifyVoucher: React.FC = () => {
       {/* Scanner Overlay */}
       <AnimatePresence>
         {showScanner && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -250,7 +266,7 @@ export const VerifyVoucher: React.FC = () => {
               }} />
             </div>
             <div className="p-6 bg-black/50 backdrop-blur-md">
-              <button 
+              <button
                 onClick={() => setShowScanner(false)}
                 className="w-full h-[65px] bg-white text-black font-black rounded-2xl"
               >
