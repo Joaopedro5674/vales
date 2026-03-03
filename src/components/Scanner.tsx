@@ -11,10 +11,13 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan }) => {
   useEffect(() => {
     scannerRef.current = new Html5QrcodeScanner(
       "reader",
-      { 
-        fps: 10, 
+      {
+        fps: 10,
         qrbox: { width: 250, height: 250 },
-        aspectRatio: 1.0
+        aspectRatio: 1.0,
+        videoConstraints: {
+          facingMode: "environment"
+        }
       },
       /* verbose= */ false
     );
@@ -37,7 +40,7 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan }) => {
         } catch (e) {
           // Not a URL, use raw text
         }
-        
+
         onScan(id);
       },
       (error) => {
