@@ -1,0 +1,5 @@
+{
+  "name": "Controle de Vales",
+  "description": "Aplicativo mobile-first para controle de vales de gás com integração Google Sheets",
+  "requestFramePermissions": ["camera"]
+}
